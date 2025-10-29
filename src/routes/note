@@ -1,0 +1,36 @@
+const express = require('express');
+const router = express.Router();
+const ctrl = require('../controllers/note.controller');
+const auth = require('../middlewares/auth.middleware');
+
+
+// CREATE (POST)
+router.post('/', notesController.createNote);
+
+// READ (GET)
+router.get('/', notesController.getAllNotes);
+
+// READ ONE (GET by ID)
+router.get('/:id', notesController.getNoteById);
+
+// UPDATE (PUT)
+router.put('/:id', notesController.updateNote);
+
+// DELETE (DELETE)
+router.delete('/:id', notesController.deleteNote);
+
+module.exports = router;
+
+
+
+
+router.use(auth);
+router.post('/', ctrl.createNote);
+router.get('/', ctrl.listNotes);
+router.get('/search', ctrl.searchNotes); // ?q=... or ?tag=...
+router.get('/recent', ctrl.recentNotes);
+router.get('/:id', ctrl.getNote);
+router.put('/:id', ctrl.updateNote);
+router.delete('/:id', ctrl.deleteNote);
+
+module.exports = router;

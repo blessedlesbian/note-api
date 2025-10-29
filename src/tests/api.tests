@@ -1,0 +1,31 @@
+const request = require('supertest');
+const express = require('express');
+const bodyParser = require('body-parser');
+const noteRoutes = require('../routes/notes');
+
+const app = express();
+app.use(bodyParser.json());
+app.use('/notes', noteRoutes);
+
+describe('Notes API', () => {
+  it('should create a new note', async () => {
+    const res = await request(app)
+      .post('/notes')
+      .send({
+        userId: "1",
+        title: "Primeira nota",
+        content: "Conteúdo de teste",
+        tags: ["trabalho"]
+      });
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveProperty('title', 'Primeira nota');
+  });
+
+  it('should get all notes', async () => {
+    const res = await request(app).get('/notes');
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+});
+
