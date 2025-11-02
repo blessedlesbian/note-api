@@ -1,30 +1,29 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
 
-const userRoutes = require('./routes/users');
-const noteRoutes = require('./routes/notes');
-const tagRoutes = require('./routes/tags');
-
+// Criação do app
 const app = express();
 app.use(bodyParser.json());
 
-// Rotas
+// Importação das rotas
+import userRoutes from './routes/users.js';
+import noteRoutes from './routes/notes.js';
+import tagRoutes from './routes/tags.js';
+import authRoutes from './routes/auth.js';
+
+// Registro das rotas principais
 app.use('/users', userRoutes);
 app.use('/notes', noteRoutes);
 app.use('/tags', tagRoutes);
+app.use('/auth', authRoutes);
 
-// Middleware para rota não encontrada
+// Rota padrão para erros 404
 app.use((req, res) => {
   res.status(404).json({ error: 'Rota não encontrada' });
 });
 
-// Exporta o app (para o Jest e outros módulos poderem usar)
-module.exports = app;
+// Inicialização do servidor
+const PORT = 3000;
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
-// Inicializa o servidor somente se este arquivo for executado diretamente
-if (require.main === module) {
-  const PORT = 3000;
-  app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
-}
-
-
+export default app;

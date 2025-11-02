@@ -2,6 +2,7 @@
   "name": "notes-api",
   "version": "1.0.0",
   "description": "API pessoal para controle de notas, usuários e tags.",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node src/server.js",

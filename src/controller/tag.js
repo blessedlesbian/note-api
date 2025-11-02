@@ -1,7 +1,19 @@
-const { v4: uuidv4 } = require('uuid');
-const dbService = require('../services/db.service');
+import fs from 'fs-extra';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { fileURLToPath } from 'url';
 
-async function createTag(req, res) {
+// recria __dirname (não existe em módulos ES)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const notesPath = path.join(__dirname, '../data/notes.json');
+
+// o await agora funciona no topo
+const notes = await fs.readJson(notesPath).catch(() => []);
+
+
+export async function createTag(req, res) {
   const { name } = req.body;
   const userId = req.user.id;
   if (!name) return res.status(400).json({ message: 'name required' });
@@ -16,14 +28,14 @@ async function createTag(req, res) {
   return res.status(201).json(tag);
 }
 
-async function listTags(req, res) {
+export async function listTags(req, res) {
   const userId = req.user.id;
   const db = await dbService.getAll();
   const tags = db.tags.filter(t => t.userId === userId);
   res.json(tags);
 }
 
-async function updateTag(req, res) {
+export async function updateTag(req, res) {
   const { id } = req.params;
   const { name } = req.body;
   const userId = req.user.id;
@@ -36,7 +48,7 @@ async function updateTag(req, res) {
   res.json(tag);
 }
 
-async function deleteTag(req, res) {
+export async function deleteTag(req, res) {
   const { id } = req.params;
   const userId = req.user.id;
   const db = await dbService.getAll();
@@ -52,4 +64,3 @@ async function deleteTag(req, res) {
   res.status(204).send();
 }
 
-module.exports = { createTag, listTags, updateTag, deleteTag };

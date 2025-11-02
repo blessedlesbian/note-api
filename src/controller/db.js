@@ -1,5 +1,11 @@
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Corrige __dirname para ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const DB_PATH = path.join(__dirname, '..', 'data', 'data.json');
 
 async function readDB() {
@@ -16,23 +22,20 @@ async function writeDB(db) {
   await fs.writeFile(DB_PATH, JSON.stringify(db, null, 2));
 }
 
-module.exports = {
-  async getAll() {
-    const db = await readDB();
-    db.users = db.users || [];
-    db.tags = db.tags || [];
-    db.notes = db.notes || [];
-    return db;
-  },
+export async function getAll() {
+  const db = await readDB();
+  db.users = db.users || [];
+  db.tags = db.tags || [];
+  db.notes = db.notes || [];
+  return db;
+}
 
-  async save(db) {
-    await writeDB(db);
-    return true;
-  },
+export async function save(db) {
+  await writeDB(db);
+  return true;
+}
 
-  // helpers
-  async resetSample() {
-    const sample = { users: [], tags: [], notes: [] };
-    await writeDB(sample);
-  }
-};
+export async function resetSample() {
+  const sample = { users: [], tags: [], notes: [] };
+  await writeDB(sample);
+}
