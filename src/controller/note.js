@@ -12,13 +12,13 @@ const notes = await fs.readJson(notesPath).catch(() => []); // evita erro se o a
 
 
 
-async function createNote(req, res) {
+export async function createNote(req, res) {
   const { title, content, tagIds } = req.body;
   const userId = req.user.id;
   if (!title || !content || !Array.isArray(tagIds) || tagIds.length === 0) {
     return res.status(400).json({ message: 'title, content and at least one tagId required' });
   }
-  const db = await dbService.getAll();
+  const db = await getAll();
   // verificar se as tags existem e pertencem ao usuario
   for (const tid of tagIds) {
     const t = db.tags.find(x => x.id === tid && x.userId === userId);
@@ -33,21 +33,23 @@ async function createNote(req, res) {
     createdAt: new Date().toISOString()
   };
   db.notes.push(note);
-  await dbService.save(db);
+  await save(db);
   res.status(201).json(note);
 }
 
 async function listNotes(req, res) {
   const userId = req.user.id;
-  const db = await dbService.getAll();
+  const db = await getAll();
   const notes = db.notes.filter(n => n.userId === userId);
   res.json(notes);
+
+
 }
 
 async function getNote(req, res) {
   const { id } = req.params;
   const userId = req.user.id;
-  const db = await dbService.getAll();
+  const db = await getAll();
   const note = db.notes.find(n => n.id === id && n.userId === userId);
   if (!note) return res.status(404).json({ message: 'note not found' });
   res.json(note);
@@ -57,7 +59,7 @@ async function updateNote(req, res) {
   const { id } = req.params;
   const { title, content, tagIds } = req.body;
   const userId = req.user.id;
-  const db = await dbService.getAll();
+  const db = await getAll();
   const note = db.notes.find(n => n.id === id && n.userId === userId);
   if (!note) return res.status(404).json({ message: 'note not found' });
   if (title) note.title = title;
@@ -70,18 +72,18 @@ async function updateNote(req, res) {
     }
     note.tagIds = tagIds;
   }
-  await dbService.save(db);
+  await save(db);
   res.json(note);
 }
 
 async function deleteNote(req, res) {
   const { id } = req.params;
   const userId = req.user.id;
-  const db = await dbService.getAll();
+  const db = await getAll();
   const idx = db.notes.findIndex(n => n.id === id && n.userId === userId);
   if (idx === -1) return res.status(404).json({ message: 'note not found' });
   db.notes.splice(idx, 1);
-  await dbService.save(db);
+  await save(db);
   res.status(204).send();
 }
 
@@ -89,7 +91,7 @@ async function deleteNote(req, res) {
 async function searchNotes(req, res) {
   const userId = req.user.id;
   const { q, tag } = req.query;
-  const db = await dbService.getAll();
+  const db = await getAll();
   let notes = db.notes.filter(n => n.userId === userId);
   if (q) {
     const ql = q.toLowerCase();
@@ -108,7 +110,7 @@ async function searchNotes(req, res) {
 // last 5 recent notes
 async function recentNotes(req, res) {
   const userId = req.user.id;
-  const db = await dbService.getAll();
+  const db = await getAll();
   const notes = db.notes
     .filter(n => n.userId === userId)
     .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -155,3 +157,4 @@ exports.deletarNota = (req, res) => {
   notas.splice(index, 1);
   res.json({ message: 'Nota deletada com sucesso!' });
 };
+

@@ -1,47 +1,47 @@
 
 import fs from 'fs-extra';
-import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-// Simular __dirname no ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const DB_PATH = join(__dirname, '..', 'data', 'data.json');
 
-async function readDB() {
-  await fs.ensureFile(DB_PATH);
-  const raw = await fs.readFile(DB_PATH, 'utf8').catch(() => '{}');
-  try {
-    return JSON.parse(raw || '{}');
-  } catch (e) {
-    return { users: [], tags: [], notes: [] };
-  }
-}
-
-async function writeDB(db) {
-  await fs.writeFile(DB_PATH, JSON.stringify(db, null, 2));
-}
-
-// Exportando como objeto padrão
-export default {
-  async getAll() {
-    const db = await readDB();
-    db.users = db.users || [];
-    db.tags = db.tags || [];
-    db.notes = db.notes || [];
-    return db;
-  },
-
-  async save(db) {
-    await writeDB(db);
-    return true;
-  },
-
-  // helpers
-  async resetSample() {
-    const sample = { users: [], tags: [], notes: [] };
-    await writeDB(sample);
-  }
+const PATHS = {
+  users: join(__dirname, '..', 'db', 'users.json'),
+  notes: join(__dirname, '..', 'db', 'notes.json'),
+  tags: join(__dirname, '..', 'db', 'tags.json')
 };
+
+async function read(path) {
+  await fs.ensureFile(path);
+  const raw = await fs.readFile(path, 'utf8').catch(() => '[]');
+  console.log(raw)
+  return JSON.parse(raw || '[]');
+}
+
+async function write(path, data) {
+  await fs.writeFile(path, JSON.stringify(data, null, 2));
+}
+
+export async function getUsers() {
+  return read(PATHS.users);
+  
+}
+export async function saveUsers(users) {
+  return write(PATHS.users, users);
+}
+
+export async function getNotes() {
+  return read(PATHS.notes);
+}
+export async function saveNotes(notes) {
+  return write(PATHS.notes, notes);
+}
+
+export async function getTags() {
+  return read(PATHS.tags);
+}
+export async function saveTags(tags) {
+  return write(PATHS.tags, tags);
+}
 
