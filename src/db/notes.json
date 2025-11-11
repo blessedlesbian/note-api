@@ -1,0 +1,43 @@
+[
+  {
+    "id": "fe0bec28-6c77-489a-b868-849e3a54513d",
+    "userId": "123",
+    "title": "nyota",
+    "content": "nyonoyta testing.",
+    "tags": [
+      "teste",
+      "inicial"
+    ],
+    "createdAt": "2025-11-07T13:43:50.585Z"
+  },
+  {
+    "id": "9e993708-2acb-4fe5-9e87-4c4f270dae30",
+    "userId": "6a7c8e6f-5c59-48a0-ac60-63277f42d7ea",
+    "title": "nyonyon",
+    "content": "nyon testing.",
+    "tagIds": [
+      "124"
+    ],
+    "createdAt": "2025-11-08T16:43:51.310Z"
+  },
+  {
+    "id": "7a46960f-ca3b-4ef7-bf9f-0f9bedeb8572",
+    "userId": "6a7c8e6f-5c59-48a0-ac60-63277f42d7ea",
+    "title": "nyu",
+    "content": "nyon akiba.",
+    "tagIds": [
+      "124"
+    ],
+    "createdAt": "2025-11-08T16:44:39.725Z"
+  },
+  {
+    "id": "436a683d-d57f-4597-8a53-b35ddb70b364",
+    "userId": "6a7c8e6f-5c59-48a0-ac60-63277f42d7ea",
+    "title": "conta",
+    "content": "conta de luz",
+    "tagIds": [
+      "5733e509-b64b-4862-a849-e9789699bf2a"
+    ],
+    "createdAt": "2025-11-11T00:10:33.938Z"
+  }
+]

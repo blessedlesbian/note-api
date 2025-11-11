@@ -31,14 +31,14 @@ export async function saveUsers(users) {
   return write(PATHS.users, users);
 }
 
-export async function getNotes() {
+export async function getNotesDB() {
   return read(PATHS.notes);
 }
 export async function saveNotes(notes) {
   return write(PATHS.notes, notes);
 }
 
-export async function getTags() {
+export async function getTagsDB() {
   return read(PATHS.tags);
 }
 export async function saveTags(tags) {

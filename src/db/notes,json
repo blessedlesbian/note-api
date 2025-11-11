@@ -1,5 +1,0 @@
-[]
-
-const DB_PATHnotes = join(__dirname, '..', 'db', 'notes.json');
-const DB_PATHuser = join(__dirname, '..', 'db', 'users.json');
-const DB_PATHtags = join(__dirname, '..', 'db', 'tags.json');
